@@ -158,7 +158,7 @@ console.log(fenomenler[2]["followers"]);
 (işlev yazmanıza gerek yok)
 Fenomenler dizisinde bir yazım hatası var 😱 7. sıradaki fenomen 'Justin Bieber' ın soyismi 'Biber' olarak yanlış yazılmış. Bu sorunu düzeltin ve çalışmanızı kontrol etmek için console.log() yapın. */
 
-fenomenler[6].profile = "Justin Bieber";
+fenomenler[6].profile = "Justin Biber";
 console.log(fenomenler[6]);
 
 /*  Görev 3:
@@ -186,9 +186,17 @@ Aşağıdakileri yapmak için profilListesi'ni kullanın:
 🌟 Dönüş ÖRNEĞİ: ["Instagram", "Cristiano Ronaldo", "Kylie"....]
 */
 
-function profilListesi(/*kod*/) {
-  /*kod*/
+function profilListesi(dizi) {
+  let profilIsimleri = [];
+
+  for (let i = 0; i < dizi.length; i++) {
+   profilIsimleri.push(fenomenler[i].profile);
+    
+  }
+  return profilIsimleri;
 }
+
+console.log(profilListesi(fenomenler));
 
 
 
