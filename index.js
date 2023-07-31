@@ -150,15 +150,17 @@ Aşağıdakileri konsolda gösterim (console.log) işlemi gerçekleştirerek, yu
 
 //(1) Dizideki ilk fenomen (0. dizin) profil (profile) adı
 console.log(fenomenler[0]["profile"]);
+console.log(fenomenler[0].profile);
 
 //(2) Dizideki üçüncü fenomenin (2. dizin) takipçi (followers) sayısı
 console.log(fenomenler[2]["followers"]);
+console.log(fenomenler[2].followers);
 
 /* Görev 2 (otomatik kontrol testi yapılmayacak):
 (işlev yazmanıza gerek yok)
 Fenomenler dizisinde bir yazım hatası var 😱 7. sıradaki fenomen 'Justin Bieber' ın soyismi 'Biber' olarak yanlış yazılmış. Bu sorunu düzeltin ve çalışmanızı kontrol etmek için console.log() yapın. */
 
-fenomenler[6].profile = "Justin Biber";
+fenomenler[6].profile = "Justin Bieber";
 console.log(fenomenler[6]);
 
 /*  Görev 3:
@@ -171,10 +173,16 @@ NOT: DÖNDÜĞÜNÜZ DİZİN YUKARIDAKİ BİÇİMLE EŞLEŞMESİ GEREKİR, YA DA
 ÖRNEK: fenomenler dizisi ve 3 sayısı ile indekseGoreFenomen çağrılırsa, `3. indekste bulunan fenomen: Leo Messi' */
 
 function indekseGoreFenomen(dizi,indeks) {
-  return indeks + `. indekste bulunan fenomen: ` + dizi[indeks]["profile"];
-}
-console.log(indekseGoreFenomen(fenomenler, 3));
+  if (indeks <0 || indeks >= dizi.length || typeof indeks === 'string') {
+    return `Hata: Geçersiz indeks. Indeks 0 ile ${dizi.length - 1} arasında olmalı.`; //Burada girilen indeks değerinin dizinin sınırları içerisinde olup olmadığının kontrolü yapılıyor.
+  }
 
+  return indeks + `. indekste bulunan fenomen: ` + dizi[indeks]["profile"];
+
+}
+//console.log(indekseGoreFenomen(fenomenler, 2));
+//console.log(indekseGoreFenomen(fenomenler, 10.2));  // Hata mesajı
+console.table(indekseGoreFenomen(fenomenler, 2));
 
 
 
@@ -187,16 +195,21 @@ Aşağıdakileri yapmak için profilListesi'ni kullanın:
 */
 
 function profilListesi(dizi) {
-  let profilIsimleri = [];
+  let yeniBirDizi =[];
 
   for (let i = 0; i < dizi.length; i++) {
-   profilIsimleri.push(fenomenler[i].profile);
-    
+
+    if(dizi[i].hasOwnProperty('profile')){ //Burada girilen dizide "profile" key'in varlığı kontrol edilmektedir.
+      yeniBirDizi.push(dizi[i].profile);
+    } else {
+      yeniBirDizi.push('Bulunamadı');
+      //yeniBirDizi[i].profile.push("Bulunamadı");
+    } 
   }
-  return profilIsimleri;
+  return yeniBirDizi;
 }
 
-console.log(profilListesi(fenomenler));
+//console.log(profilListesi(fenomenler));
 
 
 
@@ -210,8 +223,17 @@ Aşağıdakileri yapmak için fenomenSil'i kullanın:
 
 ÖRNEK: fenomenSil işlevi fenomenler dizisi ve 0 indeks sayısı ile çağrılırsa, veri kümemizden 'Instagram' kaldırılmış olarak döndürür. */
 function fenomenSil(dizi,indeks) {
-  let yeniFenomenSilDizisi = dizi;
-  yeniFenomenSilDizisi.splice(indeks,1);
+
+  let yeniFenomenSilDizisi = [...dizi];
+
+  if(indeks <0 || indeks >= dizi.length){
+    return  `Hata: Geçersiz indeks. Indeks 0 ile ${dizi.length - 1} arasında olmalı.`;
+  } else {
+
+    yeniFenomenSilDizisi.splice(indeks,1);
+  
+  }
+  
   return yeniFenomenSilDizisi;
 
 }
@@ -236,19 +258,22 @@ Aşağıdakileri yapmak için fenomenEkle'i kullanın:
 ÖRNEK: fenomenEkle(fenomenler, 6, "Workintech", 10000000, 2022, "Instagram") çağrıldığında dizinin sonuna yukarıdaki nesne en sona eklenerek yeni fenomenler dizisini döndürmelidir. */
 
 function fenomenEkle(dizi,_number,_profile,_followers,_post,_platforms) {
-  let yeniFenomenDizi = dizi;
-  let new_fenomen_ekle = {
+  let yeniFenomenDizi = [...dizi];
+  let newFenomenAdd = {
     "number": _number,
     "profile": _profile,
     "followers": _followers,
     "posts": _post,
     "platform": _platforms
   }
-    yeniFenomenDizi.push(new_fenomen_ekle);
+    yeniFenomenDizi.push(newFenomenAdd);
+    console.log(`Başarıyla eklenen fenomen: ${_profile}, Platform: ${_platforms}`);
+
 
     return yeniFenomenDizi;
 }
 
+console.log(fenomenEkle(fenomenler,25,"Şeref",10000,20000,"Twitter"));
 
 /* Görev 7:
 Aşağıdakileri yapmak için enFenomenler'yi kullanın:
@@ -268,7 +293,11 @@ function enFenomenler(dizi) {
     }
     return yeniEnFenomenler;
 
-}
+    const newArr = dizi.filter((person) => person.followers > 100000000).map((person) => person.profile);
+    return newArr;
+
+} 
+
 
 
 /* Görev 8:
@@ -281,12 +310,19 @@ Aşağıdakileri yapmak için fenomenGonderimSayisi'nı kullanın:
 */
 
 function fenomenGonderimSayisi(array,profileInput){
+  /*
   for (let i = 0; i < array.length; i++) {
     if (array[i].profile == profileInput) {
       return array[i].posts ;     
     }
   }
+  */
+ const arr = Number(array.filter((person) => person.profile === profileInput && person.posts !== 'NA').map((person) => person.posts));
+ //const num = Number(arr.join(''));
+ return arr;
 }
+
+
 
 
 
@@ -312,7 +348,14 @@ function platformaGoreCokGonderiYapanFenomen(array,platformNameInput){
     }
     
   }
-  return profileMaxPosts;
+  return profileMaxPosts || 'Burada kriterlere uygun fenomen bulunamadı.';
+
+  //VEYA
+
+  const arr = array.filter((person) => person.platform === platformNameInput && person.post !== 'NA').sort(function(a,b){
+    return b.posts - a.posts;
+  }) 
+  return arr[0].profile;
 }
 
 
