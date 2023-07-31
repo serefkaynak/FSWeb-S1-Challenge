@@ -310,6 +310,7 @@ Aşağıdakileri yapmak için fenomenGonderimSayisi'nı kullanın:
 */
 
 function fenomenGonderimSayisi(array,profileInput){
+
   /*
   for (let i = 0; i < array.length; i++) {
     if (array[i].profile == profileInput) {
@@ -318,7 +319,7 @@ function fenomenGonderimSayisi(array,profileInput){
   }
   */
  const arr = Number(array.filter((person) => person.profile === profileInput && person.posts !== 'NA').map((person) => person.posts));
- //const num = Number(arr.join(''));
+
  return arr;
 }
 
